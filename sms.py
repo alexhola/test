@@ -2,31 +2,31 @@ import imaplib
 import email
 import telebot
 
-bot = telebot.TeleBot('<TOKEN_BOT>')  # укажите ваш токен
+bot = telebot.TeleBot('<TOKEN_BOT>')  # СѓРєР°Р¶РёС‚Рµ РІР°С€ С‚РѕРєРµРЅ
 
 mail = imaplib.IMAP4_SSL('imap.gmail.com')
-mail.login('<account>@gmail.com', '<password>')  # ваш новый аккаунт @gmail
-mail.list()  # Смотрим на папки в ящике
-mail.select('INBOX')  # Подключаемся к папке входящие
-result, data = mail.uid('search', None, 'UNSEEN')  # выбираем непрочитанные
+mail.login('<account>@gmail.com', '<password>')  # РІР°С€ РЅРѕРІС‹Р№ Р°РєРєР°СѓРЅС‚ @gmail
+mail.list()  # РЎРјРѕС‚СЂРёРј РЅР° РїР°РїРєРё РІ СЏС‰РёРєРµ
+mail.select('INBOX')  # РџРѕРґРєР»СЋС‡Р°РµРјСЃСЏ Рє РїР°РїРєРµ РІС…РѕРґСЏС‰РёРµ
+result, data = mail.uid('search', None, 'UNSEEN')  # РІС‹Р±РёСЂР°РµРј РЅРµРїСЂРѕС‡РёС‚Р°РЅРЅС‹Рµ
 
 i = len(data[0].split())
 for x in range(i):
     latest_email_uid = data[0].split()[x]
     result, email_data = mail.uid('fetch', latest_email_uid, '(RFC822)')
     raw_email = email_data[0][1]
-    mail.store(latest_email_uid, '+FLAGS', 'Deleted')  # удаляем чтоб не было повторной отправки
+    mail.store(latest_email_uid, '+FLAGS', 'Deleted')  # СѓРґР°Р»СЏРµРј С‡С‚РѕР± РЅРµ Р±С‹Р»Рѕ РїРѕРІС‚РѕСЂРЅРѕР№ РѕС‚РїСЂР°РІРєРё
     raw_email_string = raw_email.decode('utf-8')
-    email_message = email.message_from_string(raw_email_string)  # получаем сырое письмо в виде строки
+    email_message = email.message_from_string(raw_email_string)  # РїРѕР»СѓС‡Р°РµРј СЃС‹СЂРѕРµ РїРёСЃСЊРјРѕ РІ РІРёРґРµ СЃС‚СЂРѕРєРё
 
 for part in email_message.walk():
     if part.get_content_type() == "text/html" or part.get_content_type() == "text/plain":
         body = part.get_payload(decode=True)
         s = (email_message['Subject'])
-        mss = str(body.decode('unicode-escape'))  # декодируем тело письма и в Python3 отменяем unicode
-        abon = mss[45:58]  # выделяем номер отправителя
-        smss = mss[59:]  # выделяем тело СМС, а именно собственно само сообщение
-        soobsh = ('От:  ' + abon + ' \n' + 'текст:  ' + smss)  # форматируем для отправки
-        bot.send_message(<chat_id, soobsh)  # укажите ваш chat_id и отправляйте в телегу ваше СМС
+        mss = str(body.decode('unicode-escape'))  # РґРµРєРѕРґРёСЂСѓРµРј С‚РµР»Рѕ РїРёСЃСЊРјР° Рё РІ Python3 РѕС‚РјРµРЅСЏРµРј unicode
+        abon = mss[45:58]  # РІС‹РґРµР»СЏРµРј РЅРѕРјРµСЂ РѕС‚РїСЂР°РІРёС‚РµР»СЏ
+        smss = mss[59:]  # РІС‹РґРµР»СЏРµРј С‚РµР»Рѕ РЎРњРЎ, Р° РёРјРµРЅРЅРѕ СЃРѕР±СЃС‚РІРµРЅРЅРѕ СЃР°РјРѕ СЃРѕРѕР±С‰РµРЅРёРµ
+        soobsh = ('РћС‚:  ' + abon + ' \n' + 'С‚РµРєСЃС‚:  ' + smss)  # С„РѕСЂРјР°С‚РёСЂСѓРµРј РґР»СЏ РѕС‚РїСЂР°РІРєРё
+        bot.send_message(<chat_id>, soobsh)  # СѓРєР°Р¶РёС‚Рµ РІР°С€ chat_id Рё РѕС‚РїСЂР°РІР»СЏР№С‚Рµ РІ С‚РµР»РµРіСѓ РІР°С€Рµ РЎРњРЎ
     else:
         continue
