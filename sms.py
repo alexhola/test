@@ -7,7 +7,7 @@ bot = telebot.TeleBot('<TOKEN_TG_Bot>')  # укажите ваш токен
 mail = imaplib.IMAP4_SSL('<IMAP_ADDR>')  # Адрес IMAP сервера
 mail.login('<LoGIN>', '<password>')  # Учетные данные электронной почты
 mail.list()  # Смотрим на папки в ящике
-mail.select('1')  # Подключаемся к папке входящие
+mail.select('1')  # Подключаемся к папке с именем 1
 result, data = mail.uid('search', None, 'UNSEEN')  # Выполняет поиск и возвращает UID писем.
 
 i = len(data[0].split())
