@@ -30,7 +30,7 @@ for part in email_message.walk():
         bot.send_message(<CHAT_ID>, soobsh)  # укажите ваш chat_id и отправляйте в телегу ваше СМС
         #
         raw_email = email_data[0][1]
-        mov, data = mail.uid('STORE', latest_email_uid, '+FLAGS', '(\Deleted)')  # Помечаем к уаделнию последнее письмо
+        mov, data = mail.uid('STORE', latest_email_uid, '+FLAGS', '(\Deleted)')  # Помечаем к удалению последнее обработанное письмо
         mail.expunge()  # очищаем корзину
         #
     else:
